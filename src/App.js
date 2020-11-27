@@ -15,7 +15,7 @@ function App() {
       var reader = new FileReader()
 
       var textFile = /text.*/;
-
+      if(file)
       if (file.type.match(textFile)) {
 
 
@@ -92,6 +92,8 @@ function App() {
       } else {
         preview.innerHTML = "<span class='error'>It doesn't seem to be a text file!</span>";
       }
+
+      if(file)
       reader.readAsText(file);
 
 
@@ -244,6 +246,7 @@ function App() {
         <span className="createdBy">Made with 💙 by Lisandro Molina</span>
       </div>
       <input type="file" onChange={showFile} />
+
       
       </div>
 
