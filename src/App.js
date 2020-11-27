@@ -114,6 +114,7 @@ function App() {
   const mergeOrderId = (obj) => {
 
     var output = [];
+    var outout_gogo = [];
 
     obj.forEach(function (item) {
 
@@ -237,12 +238,15 @@ function App() {
       <div className="container">
         <h1>Shopify to Ninja Van CSV Format</h1> 
       <div id="show-text">
-        <p>Only upload .csv file exported from Shopify.<br />
+        <p>Only upload .csv file* exported from Shopify.<br />
         Formatted .csv file will automatically start downloading.
         Please double check data before uploading to Ninja Van Dashboard.
         Use at your own risk! &#9888;
-        
+        <br />
+        <br />
+        <span className="note">*convert the file to *.txt extension if you're on a windows machine.</span>
         </p>
+        
         <span className="createdBy">Made with 💙 by Lisandro Molina</span>
       </div>
       <input type="file" onChange={showFile} />

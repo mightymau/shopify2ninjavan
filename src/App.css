@@ -34,3 +34,7 @@ h1 {
   font-family: 'Raleway', sans-serif;
 
 }
+.note {
+  font-size: small;
+  font-weight: 700;
+}
