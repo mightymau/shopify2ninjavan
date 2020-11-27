@@ -68,7 +68,8 @@ function App() {
                 'SUBTOTAL',
                 'TOTAL',
                 'ITEMS',
-                'VENDOR'
+                'VENDOR',
+                'SHIPPING METHOD'
 
               ];
 
@@ -123,6 +124,7 @@ function App() {
       });
 
 
+
       if (existing.length) {
 
         existing.forEach((existingItem) => {
@@ -139,7 +141,7 @@ function App() {
       } else {
 
 
-        // New Record
+        // New Record Ninja Van
         //console.log(`${item['Shipping Method']} ${item['Financial Status']}`)
         if (item['Shipping Method'] == 'NINJA VAN - STANDARD' && item['Financial Status'] == 'paid') {
           exportedDay = item['Created at'].substr(0,10);
@@ -183,7 +185,8 @@ function App() {
               'SUBTOTAL': item['Subtotal'],
               'TOTAL': item['Total'],
               'ITEMS' : item['Lineitem name'],
-              'VENDOR': item['Vendor']
+              'VENDOR': item['Vendor'],
+              'SHIPPING METHOD': item['Shipping Method']
               
             });
           }
@@ -192,7 +195,58 @@ function App() {
 
 
         }
+        
+        
+        //GOGO
+        if ((item['Shipping Method'] == 'GOGO XPRESS' || item['Shipping Method'] == 'GOGO XPRESS BOX') && item['Financial Status'] == 'paid') {
+          exportedDay = item['Created at'].substr(0,10);
+          if(item['Shipping Zip'].charAt(0) == "'") 
+            item['Shipping Zip'] = item['Shipping Zip'].substring(1);
+        
+            output.push({
+              'REQUESTED TRACKING NUMBER': '',
+              'NAME': item['Shipping Name'],
+              'ADDRESS 1': removeQuotes(item['Shipping Address1']),
+              'PACKAGE TYPE': '',
+              'ADDRESS 2': item['Shipping Address2'],
+              'SUBDIVISION': '',
+              'CITY': item['Shipping City'],
+              'PROVINCE': item['Shipping Province'],
+              'EMAIL': item['Email'],
+              'CONTACT': item['Shipping Phone'],
+              'POSTCODE': item['Shipping Zip'],
+              'DELIVERY DATE': '',
+              'SIZE': '',
+              'WEIGHT': '',
+              'DELIVERY TYPE': '',
+              'SHIPPER ORDER NO': item.Name,
+              'INSTRUCTIONS': item.Notes,
+              'WEEKEND DELIVERY': '',
+              'PARCEL DESCRIPTION': `Manila International Online Book Fair \nOrder Number: ${item['Name']} \nVendor: ${item['Vendor']}\nPackage: ${i} of ${pouchCount}`,
+              'IS DANGEROUS GOOD': '',
+              'CASH ON DELIVERY': 0,
+              'INSURED VALUE': item['Subtotal'],
+              'VOLUME': '',
+              'LENGTH': '',
+              'WIDTH': '',
+              'HEIGHT': '',
+              'SHIPPING METHOD': item['Shipping Method'],
+              'SHIPPING': item['Shipping'],
+              'SUBTOTAL': item['Subtotal'],
+              'TOTAL': item['Total'],
+              'ITEMS' : item['Lineitem name'],
+              'VENDOR': item['Vendor'],
+              'SHIPPING METHOD': item['Shipping Method']
+              
+            });
+          
 
+
+
+
+        }
+
+        ///////
       }
 
 
