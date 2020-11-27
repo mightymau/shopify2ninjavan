@@ -4,8 +4,9 @@ import CSVtoJSON from 'csvtojson';
 import JSONtoCSV from 'json2csv';
 
 function App() {
-
+  var exportedDay;
   const showFile = () => {
+    
 
     let csvresult = {};
     if (window.File && window.FileReader && window.FileList && window.Blob) {
@@ -103,7 +104,7 @@ function App() {
     const element = document.createElement("a");
     const file = new Blob([csv], { type: 'text/plain' });
     element.href = URL.createObjectURL(file);
-    element.download = "formatted.csv";
+    element.download = `Ninjavan-ALL_VENDORS-${exportedDay}.csv`;
     document.body.appendChild(element); // Required for this to work in FireFox
     element.click();
   }
@@ -138,7 +139,7 @@ function App() {
         // New Record
         //console.log(`${item['Shipping Method']} ${item['Financial Status']}`)
         if (item['Shipping Method'] == 'NINJA VAN - STANDARD' && item['Financial Status'] == 'paid') {
-
+          exportedDay = item['Created at'].substr(0,10);
           if(item['Shipping Zip'].charAt(0) == "'") 
             item['Shipping Zip'] = item['Shipping Zip'].substring(1);
           
