@@ -6,7 +6,7 @@ import JSONtoCSV from 'json2csv';
 function App() {
   var exportedDay;
   const showFile = () => {
-    
+
 
     let csvresult = {};
     if (window.File && window.FileReader && window.FileList && window.Blob) {
@@ -15,87 +15,99 @@ function App() {
       var reader = new FileReader()
 
       var textFile = /text.*/;
-      if(file)
-      if (file.type.match(textFile)) {
+      if (file)
+        if (file.type.match(textFile)) {
 
 
-        reader.onload = function (event) {
-          //preview.innerHTML = JSONcsv(mergeOrderId(csvJSON(event.target.result)));
-          //downloadTxtFile(JSONcsv(mergeOrderId(csvJSON(event.target.result))));
-          //console.log(csvJSON(event.target.result))
-          //console.log(mergeOrderId(csvJSON(event.target.result)))
-          //console.log(CSVtoJSON(event.target.result))
-          CSVtoJSON()
-            .fromString(event.target.result)
-            .then((jsonObj) => {
-              //csvresult = jsonObj; 
-              //console.log(jsonObj) // => [["1","2","3"], ["4","5","6"], ["7","8","9"]]
-              //console.log(JSONtoCSV(mergeOrderId(jsonObj)))
+          reader.onload = function (event) {
+            //preview.innerHTML = JSONcsv(mergeOrderId(csvJSON(event.target.result)));
+            //downloadTxtFile(JSONcsv(mergeOrderId(csvJSON(event.target.result))));
+            //console.log(csvJSON(event.target.result))
+            //console.log(mergeOrderId(csvJSON(event.target.result)))
+            //console.log(CSVtoJSON(event.target.result))
+            CSVtoJSON()
+              .fromString(event.target.result)
+              .then((jsonObj) => {
+                //csvresult = jsonObj; 
+                //console.log(jsonObj) // => [["1","2","3"], ["4","5","6"], ["7","8","9"]]
+                //console.log(JSONtoCSV(mergeOrderId(jsonObj)))
 
-              console.log(jsonObj);
-              const { Parser } = require('json2csv');
+                console.log(jsonObj);
+                const { Parser } = require('json2csv');
 
-              const fields = [
+                const fields = [
 
-                'REQUESTED TRACKING NUMBER',
-                'NAME',
-                'ADDRESS 1',
-                'PACKAGE TYPE',
-                'ADDRESS 2',
-                'SUBDIVISION',
-                'CITY',
-                'PROVINCE',
-                'EMAIL',
-                'CONTACT',
-                'POSTCODE',
-                'DELIVERY DATE',
-                'SIZE',
-                'WEIGHT',
-                'DELIVERY TYPE',
-                'SHIPPER ORDER NO',
-                'INSTRUCTIONS',
-                'WEEKEND DELIVERY',
-                'PARCEL DESCRIPTION',
-                'IS DANGEROUS GOOD',
-                'CASH ON DELIVERY',
-                'INSURED VALUE',
-                'VOLUME',
-                'LENGTH',
-                'WIDTH',
-                'HEIGHT',
-                'SHIPPING METHOD',
-                'SHIPPING',
-                'SUBTOTAL',
-                'TOTAL',
-                'ITEMS',
-                'VENDOR',
-                'SHIPPING METHOD'
+                  'REQUESTED TRACKING NUMBER',
+                  'NAME',
+                  'ADDRESS 1',
+                  'PACKAGE TYPE',
+                  'ADDRESS 2',
+                  'SUBDIVISION',
+                  'CITY',
+                  'PROVINCE',
+                  'EMAIL',
+                  'CONTACT',
+                  'POSTCODE',
+                  'DELIVERY DATE',
+                  'SIZE',
+                  'WEIGHT',
+                  'DELIVERY TYPE',
+                  'SHIPPER ORDER NO',
+                  'INSTRUCTIONS',
+                  'WEEKEND DELIVERY',
+                  'PARCEL DESCRIPTION',
+                  'IS DANGEROUS GOOD',
+                  'CASH ON DELIVERY',
+                  'INSURED VALUE',
+                  'VOLUME',
+                  'LENGTH',
+                  'WIDTH',
+                  'HEIGHT',
+                  'SHIPPING METHOD',
+                  'SHIPPING',
+                  'SUBTOTAL',
+                  'TOTAL',
+                  'ITEMS',
+                  'VENDOR',
+                  'SHIPPING METHOD'
 
-              ];
+                ];
 
-              const json2csvParser = new Parser({ fields });
-              const csv = json2csvParser.parse(mergeOrderId(jsonObj));
+                const json2csvParser = new Parser({ fields });
+                const newObject = mergeOrderId(jsonObj);
+                const csv = json2csvParser.parse(newObject['output']);
 
-              console.log(mergeOrderId(jsonObj));
-
-
-
-
-
-              downloadTxtFile(csv);
-            })
-
-
-          //console.log(Object.keys(csvJSON(event.target.result)).length)
+                console.log(newObject['output_forreview'].length)
+                if(newObject['output_forreview'].length) {
+                  const csv2 = json2csvParser.parse(newObject['output_forreview']);
+                  setTimeout(()=>{downloadTxtFile(csv2,"FOR_REVIEW")},2000);
+                }
+                
 
 
+                //console.log(mergeOrderId(jsonObj)['output']);
+                //console.log(mergeOrderId(jsonObj)['output_forreview']);
+
+
+
+
+
+
+                setTimeout(()=>{downloadTxtFile(csv,"ALL_VENDORS")}, 0);
+                
+              })
+
+
+            //console.log(Object.keys(csvJSON(event.target.result)).length)
+
+
+          }
+        } else {
+          preview.innerHTML = "<span class='error'>It doesn't seem to be a text file!</span>";
         }
-      } else {
-        preview.innerHTML = "<span class='error'>It doesn't seem to be a text file!</span>";
-      }
 
-      if(file)
-      reader.readAsText(file);
+      if (file)
+        reader.readAsText(file);
 
 
     } else {
@@ -103,11 +115,11 @@ function App() {
     }
     console.log(removeQuotes('"sdf'));
   }
-  const downloadTxtFile = (csv) => {
+  const downloadTxtFile = (csv, filename) => {
     const element = document.createElement("a");
     const file = new Blob([csv], { type: 'text/plain' });
     element.href = URL.createObjectURL(file);
-    element.download = `Ninjavan-ALL_VENDORS-${exportedDay}.csv`;
+    element.download = `${filename}-${exportedDay}.csv`;
     document.body.appendChild(element); // Required for this to work in FireFox
     element.click();
   }
@@ -115,43 +127,92 @@ function App() {
   const mergeOrderId = (obj) => {
 
     var output = [];
-    var outout_gogo = [];
+    var output_forreview = [];
 
     obj.forEach(function (item) {
+
+      //console.log(output_forreview.length + item['Name'])
 
       var existing = output.filter(function (v, i) {
         return v['SHIPPER ORDER NO'] == item['Name'];
       });
-
-
-
       if (existing.length) {
-
         existing.forEach((existingItem) => {
           var existingIndex = output.indexOf(existingItem);
-          output[existingIndex]['ITEMS'] = output[existingIndex]['ITEMS'] + '\n' + item['Lineitem name'];
+          output[existingIndex]['ITEMS'] = output[existingIndex]['ITEMS'] + '\n' + `(${item['Lineitem quantity']})  ${item['Lineitem name']}`;
 
         })
-
-
-        //push new  record
-
-
-
       } else {
-
-
         // New Record Ninja Van
-        //console.log(`${item['Shipping Method']} ${item['Financial Status']}`)
-        if ((item['Shipping Method'] == 'NINJA VAN - STANDARD' || item['Shipping Method'] == 'NINJAVAN - STANDARD')  && item['Financial Status'] == 'paid') {
-          exportedDay = item['Created at'].substr(0,10);
-          if(item['Shipping Zip'].charAt(0) == "'") 
+        if ((item['Shipping Method'] == 'NINJA VAN - STANDARD' || item['Shipping Method'] == 'NINJAVAN - STANDARD') && item['Financial Status'] == 'paid') {
+          exportedDay = item['Created at'].substr(0, 10);
+          if (item['Shipping Zip'].charAt(0) == "'")
             item['Shipping Zip'] = item['Shipping Zip'].substring(1);
-          
-          //console.log(`${item['Shipping Method']} ${item['Financial Status']}`)
+
           var pouchCount = calcalateNinjavanPouches(item['Shipping'], item['Shipping Zip']);
-          console.log(item['Name'] + " " +item['Shipping Zip'] + " " +item['Shipping'] + " " + pouchCount);
-          //var i = 1;
+
+          //Pouch is 0, need to review
+          if (pouchCount == 0) {
+            
+            var existing_review = output_forreview.filter(function (v, i) {
+              return v['SHIPPER ORDER NO'] == item['Name'];
+            });
+
+            if (existing_review.length) {
+
+              // existing_review.forEach((existingItem) => {
+              //   var existingIndex = output_forreview.indexOf(existingItem);
+              //   output_forreview[existingIndex]['ITEMS'] = output_forreview[existingIndex]['ITEMS'] + '\n' + item['Lineitem name'] + " x" + item['Lineitem quantity'];
+
+              // })
+
+            } else {
+              
+              if (item['Name'])
+                output_forreview.push({
+                  'REQUESTED TRACKING NUMBER': '',
+                  'NAME': item['Shipping Name'],
+                  'ADDRESS 1': removeQuotes(item['Shipping Address1']),
+                  'PACKAGE TYPE': '',
+                  'ADDRESS 2': item['Shipping Address2'],
+                  'SUBDIVISION': '',
+                  'CITY': item['Shipping City'],
+                  'PROVINCE': item['Shipping Province'],
+                  'EMAIL': item['Email'],
+                  'CONTACT': item['Shipping Phone'],
+                  'POSTCODE': item['Shipping Zip'],
+                  'DELIVERY DATE': '',
+                  'SIZE': '',
+                  'WEIGHT': '',
+                  'DELIVERY TYPE': '',
+                  'SHIPPER ORDER NO': item.Name,
+                  'INSTRUCTIONS': item.Notes,
+                  'WEEKEND DELIVERY': '',
+                  'PARCEL DESCRIPTION': `Manila International Online Book Fair \nOrder Number: ${item['Name']} \nVendor: ${item['Vendor']}\n`,
+                  'IS DANGEROUS GOOD': '',
+                  'CASH ON DELIVERY': 0,
+                  'INSURED VALUE': item['Subtotal'],
+                  'VOLUME': '',
+                  'LENGTH': '',
+                  'WIDTH': '',
+                  'HEIGHT': '',
+                  'SHIPPING METHOD': item['Shipping Method'],
+                  'SHIPPING': item['Shipping'],
+                  'SUBTOTAL': item['Subtotal'],
+                  'TOTAL': item['Total'],
+                  'ITEMS': 'PLEASE CHECK THE ITEMS FROM THE EXPORTED FILE',
+                  'VENDOR': item['Vendor'],
+                  'SHIPPING METHOD': item['Shipping Method']
+
+                });
+
+                
+
+            }
+
+          }
+
+          //at least 1 pouch
           for (var i = 1; i <= pouchCount; i++) {
             output.push({
               'REQUESTED TRACKING NUMBER': '',
@@ -184,62 +245,59 @@ function App() {
               'SHIPPING': item['Shipping'],
               'SUBTOTAL': item['Subtotal'],
               'TOTAL': item['Total'],
-              'ITEMS' : item['Lineitem name'],
+              'ITEMS':  `(${item['Lineitem quantity']})  ${item['Lineitem name']} ${item['Lineitem quantity']}`,
               'VENDOR': item['Vendor'],
               'SHIPPING METHOD': item['Shipping Method']
-              
+
             });
           }
 
-
-
-
         }
-        
-        
+
+
         //GOGO
         if ((item['Shipping Method'] == 'GOGO XPRESS' || item['Shipping Method'] == 'GOGO XPRESS BOX') && item['Financial Status'] == 'paid') {
-          exportedDay = item['Created at'].substr(0,10);
-          if(item['Shipping Zip'].charAt(0) == "'") 
+          exportedDay = item['Created at'].substr(0, 10);
+          if (item['Shipping Zip'].charAt(0) == "'")
             item['Shipping Zip'] = item['Shipping Zip'].substring(1);
-        
-            output.push({
-              'REQUESTED TRACKING NUMBER': '',
-              'NAME': item['Shipping Name'],
-              'ADDRESS 1': removeQuotes(item['Shipping Address1']),
-              'PACKAGE TYPE': '',
-              'ADDRESS 2': item['Shipping Address2'],
-              'SUBDIVISION': '',
-              'CITY': item['Shipping City'],
-              'PROVINCE': item['Shipping Province'],
-              'EMAIL': item['Email'],
-              'CONTACT': item['Shipping Phone'],
-              'POSTCODE': item['Shipping Zip'],
-              'DELIVERY DATE': '',
-              'SIZE': '',
-              'WEIGHT': '',
-              'DELIVERY TYPE': '',
-              'SHIPPER ORDER NO': item.Name,
-              'INSTRUCTIONS': item.Notes,
-              'WEEKEND DELIVERY': '',
-              'PARCEL DESCRIPTION': `Manila International Online Book Fair \nOrder Number: ${item['Name']} \nVendor: ${item['Vendor']}\nPackage: ${i} of ${pouchCount}`,
-              'IS DANGEROUS GOOD': '',
-              'CASH ON DELIVERY': 0,
-              'INSURED VALUE': item['Subtotal'],
-              'VOLUME': '',
-              'LENGTH': '',
-              'WIDTH': '',
-              'HEIGHT': '',
-              'SHIPPING METHOD': item['Shipping Method'],
-              'SHIPPING': item['Shipping'],
-              'SUBTOTAL': item['Subtotal'],
-              'TOTAL': item['Total'],
-              'ITEMS' : item['Lineitem name'],
-              'VENDOR': item['Vendor'],
-              'SHIPPING METHOD': item['Shipping Method']
-              
-            });
-          
+
+          output.push({
+            'REQUESTED TRACKING NUMBER': '',
+            'NAME': item['Shipping Name'],
+            'ADDRESS 1': removeQuotes(item['Shipping Address1']),
+            'PACKAGE TYPE': '',
+            'ADDRESS 2': item['Shipping Address2'],
+            'SUBDIVISION': '',
+            'CITY': item['Shipping City'],
+            'PROVINCE': item['Shipping Province'],
+            'EMAIL': item['Email'],
+            'CONTACT': item['Shipping Phone'],
+            'POSTCODE': item['Shipping Zip'],
+            'DELIVERY DATE': '',
+            'SIZE': '',
+            'WEIGHT': '',
+            'DELIVERY TYPE': '',
+            'SHIPPER ORDER NO': item.Name,
+            'INSTRUCTIONS': item.Notes,
+            'WEEKEND DELIVERY': '',
+            'PARCEL DESCRIPTION': `Manila International Online Book Fair \nOrder Number: ${item['Name']} \nVendor: ${item['Vendor']}\nPackage: 1 of 1`,
+            'IS DANGEROUS GOOD': '',
+            'CASH ON DELIVERY': 0,
+            'INSURED VALUE': item['Subtotal'],
+            'VOLUME': '',
+            'LENGTH': '',
+            'WIDTH': '',
+            'HEIGHT': '',
+            'SHIPPING METHOD': item['Shipping Method'],
+            'SHIPPING': item['Shipping'],
+            'SUBTOTAL': item['Subtotal'],
+            'TOTAL': item['Total'],
+            'ITEMS': `(${item['Lineitem quantity']})  ${item['Lineitem name']}`,
+            'VENDOR': item['Vendor'],
+            'SHIPPING METHOD': item['Shipping Method']
+
+          });
+
 
 
 
@@ -253,7 +311,7 @@ function App() {
       //console.log(item.Name);
     });
 
-    return output;
+    return { output, output_forreview };
 
   }
 
@@ -290,22 +348,25 @@ function App() {
   return (
     <div className="App">
       <div className="container">
-        <h1>Shopify to Ninja Van CSV Format</h1> 
-      <div id="show-text">
-        <p>Only upload .csv file* exported from Shopify.<br />
+        <h1>Shopify to Ninja Van CSV Format</h1>
+        <div id="show-text">
+          <p>Only upload .csv file* exported from Shopify.<br />
         Formatted .csv file will automatically start downloading.
         Please double check data before uploading to Ninja Van Dashboard.
         Use at your own risk! &#9888;
         <br />
-        <br />
-        <span className="note">*convert the file to *.txt extension if you're on a windows machine.</span>
-        </p>
-        
-        <span className="createdBy">Made with 💙 by Lisandro Molina</span>
-      </div>
-      <input type="file" onChange={showFile} />
+            <br />
+            <span className="note">*convert the file to *.txt extension if you're on a windows machine.
+            <br />This app will generate 2 files if there are invalid zip codes. The first file can be uploaded to Ninjavan and the other file must be reviewed for invalid zip codes.
+            <br />Only 1 file will be generated if all entries are valid.
+            </span>
+          </p>
 
-      
+          <span className="createdBy">Made with 💙 by Lisandro Molina</span>
+        </div>
+        <input type="file" onChange={showFile} />
+
+
       </div>
 
     </div>
