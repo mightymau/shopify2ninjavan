@@ -350,17 +350,14 @@ function App() {
       <div className="container">
         <h1>Shopify to Ninja Van CSV Format</h1>
         <div id="show-text">
-          <p>Only upload .csv file* exported from Shopify.<br />
-        Formatted .csv file will automatically start downloading.
-        Please double check data before uploading to Ninja Van Dashboard.
-        Use at your own risk! &#9888;
-        <br />
-            <br />
-            <span className="note">*convert the file to *.txt extension if you're on a windows machine.
-            <br />This app will generate 2 files if there are invalid zip codes. The first file can be uploaded to Ninjavan and the other file must be reviewed for invalid zip codes.
-            <br />Only 1 file will be generated if all entries are valid.
-            </span>
-          </p>
+          <ul>
+            <li>Only upload .csv file exported from Shopify.</li>
+            <li>Convert the file to *.txt extension if you're on a windows machine.</li>
+            <li>This app will automatically generate 2 files if there are invalid zip codes. The first file can be uploaded to Ninjavan and the other file must be reviewed for invalid zip codes.</li>
+            <li>Only 1 file will be generated if all entries are valid.</li>
+            <li>Please double check data before uploading to Ninja Van Dashboard.
+        Use at your own risk! &#9888;</li>
+          </ul>
 
           <span className="createdBy">Made with 💙 by Lisandro Molina</span>
         </div>
