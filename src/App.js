@@ -232,14 +232,19 @@ function App() {
 
   return (
     <div className="App">
-      <div className="container"> 
-      <input type="file" onChange={showFile} />
+      <div className="container">
+        <h1>Shopify to Ninja Van CSV Format</h1> 
       <div id="show-text">
         <p>Only upload .csv file exported from Shopify.<br />
-        Formatted .csv file will be automatically start downloading.
+        Formatted .csv file will automatically start downloading.
+        Please double check data before uploading to Ninja Van Dashboard.
+        Use at your own risk! &#9888;
+        
         </p>
-        <span className="createdBy">Created by Lisandro Molina</span>
+        <span className="createdBy">Made with 💙 by Lisandro Molina</span>
       </div>
+      <input type="file" onChange={showFile} />
+      
       </div>
 
     </div>
