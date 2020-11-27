@@ -143,7 +143,7 @@ function App() {
 
         // New Record Ninja Van
         //console.log(`${item['Shipping Method']} ${item['Financial Status']}`)
-        if (item['Shipping Method'] == 'NINJA VAN - STANDARD' && item['Financial Status'] == 'paid') {
+        if ((item['Shipping Method'] == 'NINJA VAN - STANDARD' || item['Shipping Method'] == 'NINJAVAN - STANDARD')  && item['Financial Status'] == 'paid') {
           exportedDay = item['Created at'].substr(0,10);
           if(item['Shipping Zip'].charAt(0) == "'") 
             item['Shipping Zip'] = item['Shipping Zip'].substring(1);
