@@ -166,7 +166,7 @@ function App() {
               'SHIPPER ORDER NO': item.Name,
               'INSTRUCTIONS': item.Notes,
               'WEEKEND DELIVERY': '',
-              'PARCEL DESCRIPTION': `Manila International Online Book Fair \n Order number: ${item['Name']} \n Vendor: ${item['Vendor']}\n Package: ${i} of ${pouchCount}`,
+              'PARCEL DESCRIPTION': `Manila International Online Book Fair \nOrder Number: ${item['Name']} \nVendor: ${item['Vendor']}\nPackage: ${i} of ${pouchCount}`,
               'IS DANGEROUS GOOD': '',
               'CASH ON DELIVERY': 0,
               'INSURED VALUE': item['Subtotal'],
@@ -237,6 +237,7 @@ function App() {
         <p>Only upload .csv file exported from Shopify.<br />
         Formatted .csv file will be automatically start downloading.
         </p>
+        <span className="createdBy">Created by Lisandro Molina</span>
       </div>
       </div>
 
