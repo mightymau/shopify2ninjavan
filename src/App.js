@@ -149,7 +149,7 @@ function App() {
           if (item['Shipping Zip'].charAt(0) == "'")
             item['Shipping Zip'] = item['Shipping Zip'].substring(1);
 
-          var pouchCount = calcalateNinjavanPouches(item['Shipping'], item['Shipping Zip']);
+          var pouchCount = calculateNinjavanPouch(item['Shipping'], item['Shipping Zip'], item['Subtotal'], item['Name']);
 
           //Pouch is 0, need to review
           if (pouchCount == 0) {
@@ -157,6 +157,7 @@ function App() {
             var existing_review = output_forreview.filter(function (v, i) {
               return v['SHIPPER ORDER NO'] == item['Name'];
             });
+            
 
             if (existing_review.length) {
 
@@ -213,6 +214,7 @@ function App() {
           }
 
           //at least 1 pouch
+          console.log(output)
           for (var i = 1; i <= pouchCount; i++) {
             output.push({
               'REQUESTED TRACKING NUMBER': '',
@@ -329,16 +331,35 @@ function App() {
     return str;
   }
 
-  const calcalateNinjavanPouches = (amount, zip) => {
+  const calculateNinjavanPouch = (amount, zip, subtotal, id) => {
     let pouchCount = 0;
+
+
+      //if product amount >3000 
+      if(subtotal > 3000) {
+        //deduct 1%
+        var insurance = subtotal * 0.01;
+        var insurance_vat = insurance * 0.12;
+
+
+        amount = amount - insurance - insurance_vat;
+
+        
+      }
+
+      // deduct vat
+    amount = Math.round(amount / 1.12);
 
     if (zip <= 1820) {
       //This is Metro Manila
-      pouchCount = Math.floor(amount / 70);
+      pouchCount = Math.round( amount / 70);
+      console.log(amount + " " + id);
+
+      
 
     } else if (zip <= 5599) {
       //this is Luzon
-      pouchCount = Math.floor(amount / 180);
+      pouchCount = Math.round(amount / 180);
     }
 
     return pouchCount;
@@ -355,6 +376,7 @@ function App() {
             <li>Convert the file to *.txt extension if you're on a windows machine.</li>
             <li>This app will automatically generate 2 files if there are invalid zip codes. The first file can be uploaded to Ninjavan and the other file must be reviewed for invalid zip codes.</li>
             <li>Only 1 file will be generated if all entries are valid.</li>
+            <li><b>Orders with GOGO XPRESS shipping will also be included in the generated file.</b></li>
             <li>Please double check data before uploading to Ninja Van Dashboard.
         Use at your own risk! &#9888;</li>
           </ul>
