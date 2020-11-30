@@ -69,7 +69,8 @@ function App() {
                   'TOTAL',
                   'ITEMS',
                   'VENDOR',
-                  'SHIPPING METHOD'
+                  'SHIPPING METHOD',
+                  'PAID AT'
 
                 ];
 
@@ -203,7 +204,8 @@ function App() {
                   'TOTAL': item['Total'],
                   'ITEMS': 'PLEASE CHECK THE ITEMS FROM THE EXPORTED FILE',
                   'VENDOR': item['Vendor'],
-                  'SHIPPING METHOD': item['Shipping Method']
+                  'SHIPPING METHOD': item['Shipping Method'],
+                  'PAID AT': item['Paid at']
 
                 });
 
@@ -249,7 +251,8 @@ function App() {
               'TOTAL': item['Total'],
               'ITEMS':  `(${item['Lineitem quantity']})  ${item['Lineitem name']} ${item['Lineitem quantity']}`,
               'VENDOR': item['Vendor'],
-              'SHIPPING METHOD': item['Shipping Method']
+              'SHIPPING METHOD': item['Shipping Method'],
+              'PAID AT': item['Paid at']
 
             });
           }
@@ -296,7 +299,8 @@ function App() {
             'TOTAL': item['Total'],
             'ITEMS': `(${item['Lineitem quantity']})  ${item['Lineitem name']}`,
             'VENDOR': item['Vendor'],
-            'SHIPPING METHOD': item['Shipping Method']
+            'SHIPPING METHOD': item['Shipping Method'],
+            'PAID AT': item['Paid at']
 
           });
 
@@ -376,7 +380,6 @@ function App() {
             <li>Convert the file to *.txt extension if you're on a windows machine.</li>
             <li>This app will automatically generate 2 files if there are invalid zip codes. The first file can be uploaded to Ninjavan and the other file must be reviewed for invalid zip codes.</li>
             <li>Only 1 file will be generated if all entries are valid.</li>
-            <li><b>Orders with GOGO XPRESS shipping will also be included in the generated file.</b></li>
             <li>Please double check data before uploading to Ninja Van Dashboard.
         Use at your own risk! &#9888;</li>
           </ul>
@@ -387,6 +390,7 @@ function App() {
 
 
       </div>
+
 
     </div>
   );

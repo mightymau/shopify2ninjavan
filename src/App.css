@@ -1,6 +1,9 @@
 body {
   background: #FAFFEB;
 }
+.App {
+  display: flex;
+}
 input {
   display: block;
   margin:20px auto;
@@ -12,7 +15,7 @@ input {
   border-radius: 5px;
  }
  .container {
-   width: 500px;
+   width: 400px;
    height: 600px;
    background-color: #fff;
    border-radius: 5px;
